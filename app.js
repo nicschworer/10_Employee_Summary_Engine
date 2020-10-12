@@ -10,6 +10,78 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const newEmployeeQuestion = [
+    {
+        type: "list",
+        message: "Do you want to create a new employee?",
+        name: "employee",
+        choices: ["yes", "no"]
+    },
+];
+
+const newEmployeeDetails = [
+    {
+        type: "input",
+        message: "What is this employee's name?",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "What is this employee's ID?",
+        name: "id"
+    },  
+    {
+        type: "input",
+        message: "What is this employee's email?",
+        name: "email"
+    },    
+    {
+        type: "list",
+        message: "What is this employee's role?",
+        name: "role",
+        choices: ["Manager", "Engineer", "Intern"]
+    },
+    // if manager
+    {
+        type: "input",
+        message: "What is this Manager's office number?",
+        name: "office",
+        when: function (answers) {
+            return answers.role === "Manager"
+        },
+    },
+    // if engineer
+    {
+        type: "input",
+        message: "What is this Engineer's GitHub username?",
+        name: "git",
+        when: function(answers) {
+            return answers.role === "Engineer"
+        }
+    },
+    // if intern
+    {
+        type: "input",
+        message: "Where does this Intern go to school?",
+        name: "school",
+        when: function(answers) {
+            return answers.role === "Intern"
+        }
+    },
+]
+
+async function init() {
+    let answer = await inquirer.prompt(newEmployeeQuestion);
+    console.log(answer);
+    if (answer.employee === "yes") {
+        let detailsAnswers = await inquirer.prompt(newEmployeeDetails);
+        console.log(detailsAnswers);
+        init();
+    } else {
+        console.log("Done");
+    }
+}
+init();
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
