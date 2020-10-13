@@ -74,18 +74,45 @@ const newEmployeeDetails = [
 
 async function init() {
     let answer = await inquirer.prompt(newEmployeeQuestion);
-    console.log(answer);
     if (answer.employee === "yes") {
         let detailsAnswers = await inquirer.prompt(newEmployeeDetails);
-        console.log(detailsAnswers);
-        employees.push(detailsAnswers);
+        // create objects...
+        createEmployee(detailsAnswers);
         init();
     } else {
         console.log(employees);
-        render(employees);
+        const html = render(employees);
         console.log(html);
+        fs.writeFile(outputPath, html, (e) => {console.log(e)});
     }
+};
+
+function createEmployee (answers) {
+    if (answers.role === "Manager") {
+        createManager(answers);
+    } else if (answers.role === "Engineer") {
+        createEngineer(answers);
+    } else if (answers.role === "Intern") {
+        createIntern(answers);
+    };
+}; 
+
+function createManager (answers) {
+    const m = new Manager(answers.name, answers.id, answers.email, answers.office);
+    employees.push(m);
+};
+
+function createEngineer (answers) {
+    const e = new Engineer(answers.name, answers.id, answers.email, answers.git);
+    employees.push(e);
 }
+
+function createIntern (answers) {
+    const i = new Intern(answers.name, answers.id, answers.email, answers.school);
+    employees.push(i);
+}
+
+
 init();
 
 // Write code to use inquirer to gather information about the development team members,
