@@ -10,6 +10,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const employees = [];
+
 const newEmployeeQuestion = [
     {
         type: "list",
@@ -76,9 +78,12 @@ async function init() {
     if (answer.employee === "yes") {
         let detailsAnswers = await inquirer.prompt(newEmployeeDetails);
         console.log(detailsAnswers);
+        employees.push(detailsAnswers);
         init();
     } else {
-        console.log("Done");
+        console.log(employees);
+        render(employees);
+        console.log(html);
     }
 }
 init();
