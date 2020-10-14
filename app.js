@@ -80,9 +80,7 @@ async function init() {
         createEmployee(detailsAnswers);
         init();
     } else {
-        console.log(employees);
         const html = render(employees);
-        console.log(html);
         fs.writeFile(outputPath, html, (e) => {console.log(e)});
     }
 };
